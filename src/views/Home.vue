@@ -31,12 +31,14 @@ export default {
     searchMovie() {
       const params = {
         apikey: '1664b7e',
-        t: this.searchText,
+        s: this.searchText,
       };
 
       this.search(params)
-        .then((response) => {
-          console.log(response);
+        .then(({ data }) => {
+          console.log(data);
+          this.table.items = data.Search;
+          this.table.headers = Object.keys(data.Search[0]);
         });
     },
   },
@@ -48,7 +50,6 @@ export default {
     <div class="main-wrapper">
       <div class="layout title-section">
         Movie App
-        {{ searchText }}
       </div>
 
       <div class="layout">
@@ -65,7 +66,7 @@ export default {
         </div>
       </div>
 
-      <div class="layout">
+      <div class="layout table-wrapper">
         <div class="results-table">
           <datatable
             :headers="table.headers"
@@ -109,8 +110,14 @@ export default {
       width: 80%;
     }
 
-    .results-table {
-      width: 80%;
+    .table-wrapper {
+      height: 80%;
+      overflow: hidden;
+
+      .results-table {
+        width: 95%;
+        overflow: auto;
+      }
     }
   }
 }
