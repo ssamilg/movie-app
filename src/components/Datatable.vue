@@ -29,7 +29,9 @@ export default {
           <template v-for="header in headers">
             <td :key="header" :data-label="header">
               <template v-if="header === 'Poster'">
-                <img :src="item.Poster" height="200">
+                <div class="layout">
+                  <img :src="item.Poster" height="200">
+                </div>
               </template>
 
               <template v-else>
