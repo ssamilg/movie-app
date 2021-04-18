@@ -12,18 +12,8 @@ export default {
       isLoading: false,
       searchText: '',
       table: {
-        items: [
-          {
-            id: 0, name: 'John', age: '24', job: 'engineer',
-          },
-          {
-            id: 1, name: 'John', age: '24', job: 'engineer',
-          },
-          {
-            id: 2, name: 'John', age: '24', job: 'engineer',
-          },
-        ],
-        headers: ['name', 'age', 'job'],
+        items: [],
+        headers: [],
       },
     };
   },
