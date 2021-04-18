@@ -12,7 +12,7 @@ export default new Vuex.Store({
   },
   actions: {
     search(_, params) {
-      return axios.get(`${formatParams(params)}`);
+      return axios.get(`?${formatParams(params)}`);
     },
   },
   modules: {
