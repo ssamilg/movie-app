@@ -9,6 +9,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       searchText: '',
       table: {
         items: [
@@ -29,6 +30,8 @@ export default {
   methods: {
     ...mapActions(['search']),
     searchMovie() {
+      this.isLoading = true;
+
       const params = {
         apikey: '1664b7e',
         s: this.searchText,
@@ -39,6 +42,9 @@ export default {
           console.log(data);
           this.table.items = data.Search;
           this.table.headers = Object.keys(data.Search[0]);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
   },
@@ -67,7 +73,16 @@ export default {
       </div>
 
       <div class="layout table-wrapper">
-        <div class="results-table">
+        <div v-if="isLoading" class="table-loader">
+          <div class="ui segment fill-height">
+            <div class="ui active inverted dimmer">
+              <div class="ui text loader">Loading</div>
+            </div>
+            <p></p>
+          </div>
+        </div>
+
+        <div v-else class="results-table">
           <datatable
             :headers="table.headers"
             :items="table.items"
@@ -117,6 +132,11 @@ export default {
       .results-table {
         width: 95%;
         overflow: auto;
+      }
+
+      .table-loader {
+        height: 100%;
+        width: 95%;
       }
     }
   }
