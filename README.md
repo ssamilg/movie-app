@@ -1,4 +1,5 @@
 # movie-app
+Movie app for listing movies
 
 ## Project setup
 ```
