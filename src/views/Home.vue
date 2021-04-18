@@ -1,5 +1,6 @@
 <script>
 import Datatable from '@/components/Datatable.vue';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Home',
@@ -8,6 +9,7 @@ export default {
   },
   data() {
     return {
+      searchText: '',
       table: {
         items: [
           {
@@ -24,6 +26,20 @@ export default {
       },
     };
   },
+  methods: {
+    ...mapActions(['search']),
+    searchMovie() {
+      const params = {
+        apikey: '1664b7e',
+        t: this.searchText,
+      };
+
+      this.search(params)
+        .then((response) => {
+          console.log(response);
+        });
+    },
+  },
 };
 </script>
 
@@ -32,12 +48,18 @@ export default {
     <div class="main-wrapper">
       <div class="layout title-section">
         Movie App
+        {{ searchText }}
       </div>
 
       <div class="layout">
         <div class="search-input-section">
           <div class="ui massive fluid icon input">
-            <input type="text" placeholder="Search for a movie...">
+            <input
+              v-model="searchText"
+              type="text"
+              placeholder="Search for a movie..."
+              @keyup.enter="searchMovie"
+            >
             <i class="search icon"></i>
           </div>
         </div>
