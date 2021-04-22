@@ -34,6 +34,12 @@ export default {
                 </div>
               </template>
 
+              <template v-else-if="header === 'Title'">
+                <router-link to="/movie">
+                  {{ item.Title }}
+                </router-link>
+              </template>
+
               <template v-else>
                 <div class="text-truncate">
                   {{ item[header] }}
