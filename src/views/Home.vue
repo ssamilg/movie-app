@@ -1,24 +1,39 @@
 <script>
 import Datatable from '@/components/Datatable.vue';
+import Snackbar from '@/components/Snackbar.vue';
 import { mapActions } from 'vuex';
 
 export default {
   name: 'Home',
   components: {
+    Snackbar,
     Datatable,
   },
   data() {
     return {
       isLoading: false,
+      isInitialized: false,
       searchText: '',
       table: {
         items: [],
         headers: [],
       },
+      snackbar: {
+        isVisible: false,
+        text: 'An error occured...',
+        type: 'error',
+      },
     };
   },
   methods: {
     ...mapActions(['search']),
+    searchInputChange() {
+      if (this.searchText === '') {
+        this.isInitialized = false;
+      } else {
+        this.searchMovie();
+      }
+    },
     searchMovie() {
       this.isLoading = true;
 
@@ -29,12 +44,23 @@ export default {
 
       this.search(params)
         .then(({ data }) => {
-          console.log(data);
-          this.table.items = data.Search;
-          this.table.headers = Object.keys(data.Search[0]);
+          if (data.Search) {
+            this.table.items = data.Search;
+            this.table.headers = Object.keys(data.Search[0]).filter((h) => h !== 'imdbID');
+          } else if (data.Error) {
+            this.snackbar = {
+              isVisible: true,
+              type: 'error',
+              text: data.Error,
+            };
+          }
+        })
+        .catch(() => {
+          this.snackbar.isVisible = true;
         })
         .finally(() => {
           this.isLoading = false;
+          this.isInitialized = true;
         });
     },
   },
@@ -44,25 +70,27 @@ export default {
 <template>
   <div id="home">
     <div class="main-wrapper">
-      <div class="layout title-section">
-        Movie App
-      </div>
+      <div class="search-section">
+        <div class="layout title-section">
+          Movie App
+        </div>
 
-      <div class="layout">
-        <div class="search-input-section">
-          <div class="ui massive fluid icon input">
-            <input
-              v-model="searchText"
-              type="text"
-              placeholder="Search for a movie..."
-              @keyup.enter="searchMovie"
-            >
-            <i class="search icon"></i>
+        <div class="layout">
+          <div class="search-input-section">
+            <div class="ui massive fluid icon input">
+              <input
+                v-model="searchText"
+                type="text"
+                placeholder="Search for a movie..."
+                @keyup.enter="searchInputChange"
+              >
+              <i class="search icon"></i>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="layout table-wrapper">
+      <div v-if="isInitialized" class="layout table-wrapper">
         <div v-if="isLoading" class="table-loader">
           <div class="ui segment fill-height">
             <div class="ui active inverted dimmer">
@@ -80,6 +108,13 @@ export default {
         </div>
       </div>
     </div>
+
+    <snackbar
+      v-if="snackbar.isVisible"
+      :text="snackbar.text"
+      :type="snackbar.type"
+      @close="snackbar.isVisible = false"
+    />
   </div>
 </template>
 
@@ -103,16 +138,25 @@ export default {
   .main-wrapper {
     height: 100%;
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     border-radius: 16px;
     background-color: rgba($color: #FFFFFF, $alpha: .7);
 
     .title-section {
       font-weight: 600;
-      font-size: 24px;
+      font-size: 48px;
+      padding-bottom: 32px;
     }
 
-    .search-input-section {
+    .search-section {
       width: 80%;
+
+      .search-input-section {
+        width: 80%;
+      }
     }
 
     .table-wrapper {
