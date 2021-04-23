@@ -1,5 +1,18 @@
+<script>
+export default {
+  name: 'Movie',
+  created() {
+    console.log(this.$route.query.id);
+  },
+};
+</script>
+
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div>
+    Hello there
   </div>
 </template>
+
+<style>
+
+</style>

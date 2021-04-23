@@ -35,7 +35,7 @@ export default {
               </template>
 
               <template v-else-if="header === 'Title'">
-                <router-link to="/movie">
+                <router-link :to="{ path: 'movie', query: { id: item.imdbID }}">
                   {{ item.Title }}
                 </router-link>
               </template>
