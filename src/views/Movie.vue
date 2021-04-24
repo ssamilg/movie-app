@@ -38,10 +38,8 @@ export default {
       this.$router.push('/');
     },
     ratingClass(rating) {
-      console.log(rating);
       let ratingClass = 'ratings-good';
       const [rateValue] = rating.split('');
-      console.log(rateValue);
 
       if (rateValue > 7) {
         ratingClass = 'ratings-good';
@@ -49,6 +47,8 @@ export default {
         ratingClass = 'ratings-medium';
       } else if (rateValue < 4) {
         ratingClass = 'ratings-bad';
+      } else {
+        ratingClass = '';
       }
 
       return ratingClass;
@@ -74,16 +74,21 @@ export default {
       </div>
 
       <div class="layout info-section">
-        <div class="ratings">
-          <div :class="ratingClass(movieData.imdbRating)">
-            imdb: {{ movieData.imdbRating }}
+        <div style="width: 100%">
+          <div class="poster">
+            <img :src="movieData.Poster" height="400">
           </div>
 
-          <div :class="ratingClass(movieData.Metascore)">
-            Metascore: {{ movieData.imdbRating }}
+          <div class="ratings">
+            <div :class="ratingClass(movieData.imdbRating)">
+              IMDb: {{ movieData.imdbRating }}
+            </div>
+
+            <div :class="ratingClass(movieData.Metascore)">
+              Metascore: {{ movieData.Metascore }}
+            </div>
           </div>
         </div>
-        <!-- {{ movieData }} -->
       </div>
     </div>
   </div>
