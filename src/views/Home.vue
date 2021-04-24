@@ -26,7 +26,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['search']),
+    ...mapActions(['fetchMovieData']),
     searchInputChange() {
       if (this.searchText === '') {
         this.isInitialized = false;
@@ -42,7 +42,7 @@ export default {
         s: this.searchText,
       };
 
-      this.search(params)
+      this.fetchMovieData(params)
         .then(({ data }) => {
           if (data.Search) {
             this.table.items = data.Search;
@@ -81,10 +81,10 @@ export default {
               <input
                 v-model="searchText"
                 type="text"
-                placeholder="Search for a movie..."
+                placeholder="Search for a movie by title..."
                 @keyup.enter="searchInputChange"
               >
-              <i class="search icon"></i>
+              <i class="search icon"/>
             </div>
           </div>
         </div>
@@ -119,21 +119,21 @@ export default {
 </template>
 
 <style lang="scss">
+.layout {
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.fill-height {
+  height: 100%;
+}
+
 #home {
   height: 100%;
   padding: 16px;
   background-color: #DACFF2;
-
-  .layout {
-    width: 100%;
-    padding: 16px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .fill-height {
-    height: 100%;
-  }
 
   .main-wrapper {
     height: 100%;

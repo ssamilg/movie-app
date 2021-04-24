@@ -11,7 +11,7 @@ export default new Vuex.Store({
   mutations: {
   },
   actions: {
-    search(_, params) {
+    fetchMovieData(_, params) {
       return axios.get(`?${formatParams(params)}`);
     },
   },
