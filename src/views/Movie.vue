@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'Movie',
@@ -7,8 +7,10 @@ export default {
     return {
       movieId: '',
       movieData: {},
-      isLoading: true,
     };
+  },
+  computed: {
+    ...mapState(['snackbarData', 'isLoading', 'movieDetails']),
   },
   created() {
     this.getIdFromQuery();
@@ -27,11 +29,8 @@ export default {
       };
 
       this.fetchMovieData(params)
-        .then(({ data }) => {
-          this.movieData = data;
-        })
-        .finally(() => {
-          this.isLoading = false;
+        .then(() => {
+          this.movieData = this.movieDetails;
         });
     },
     routeBack() {

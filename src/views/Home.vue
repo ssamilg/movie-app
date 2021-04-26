@@ -1,7 +1,7 @@
 <script>
 import Datatable from '@/components/Datatable.vue';
 import Snackbar from '@/components/Snackbar.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'Home',
@@ -11,22 +11,25 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
       isInitialized: false,
       searchText: '',
       table: {
         items: [],
         headers: [],
       },
-      snackbar: {
-        isVisible: false,
-        text: 'An error occured...',
-        type: 'error',
-      },
     };
   },
+  computed: {
+    ...mapState(['snackbarData', 'searchResults', 'isLoading']),
+  },
+  mounted() {
+    if (this.searchResults) {
+      this.setTableDatas();
+      this.isInitialized = true;
+    }
+  },
   methods: {
-    ...mapActions(['fetchMovieData']),
+    ...mapActions(['fetchMovieData', 'showSnackbar']),
     searchInputChange() {
       if (this.searchText === '') {
         this.isInitialized = false;
@@ -35,33 +38,25 @@ export default {
       }
     },
     searchMovie() {
-      this.isLoading = true;
-
       const params = {
         apikey: '1664b7e',
         s: this.searchText,
       };
 
       this.fetchMovieData(params)
-        .then(({ data }) => {
-          if (data.Search) {
-            this.table.items = data.Search;
-            this.table.headers = Object.keys(data.Search[0]).filter((h) => h !== 'imdbID');
-          } else if (data.Error) {
-            this.snackbar = {
-              isVisible: true,
-              type: 'error',
-              text: data.Error,
-            };
-          }
+        .then(() => {
+          this.setTableDatas();
         })
-        .catch(() => {
-          this.snackbar.isVisible = true;
+        .catch((err) => {
+          this.showSnackbar(err, 'error');
         })
         .finally(() => {
-          this.isLoading = false;
           this.isInitialized = true;
         });
+    },
+    setTableDatas() {
+      this.table.items = this.searchResults.Search;
+      this.table.headers = Object.keys(this.searchResults.Search[0]).filter((h) => h !== 'imdbID');
     },
   },
 };
@@ -110,10 +105,10 @@ export default {
     </div>
 
     <snackbar
-      v-if="snackbar.isVisible"
-      :text="snackbar.text"
-      :type="snackbar.type"
-      @close="snackbar.isVisible = false"
+      v-if="snackbarData.isVisible"
+      :text="snackbarData.text"
+      :type="snackbarData.type"
+      @close="snackbarData.isVisible = false"
     />
   </div>
 </template>
