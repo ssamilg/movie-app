@@ -23,7 +23,7 @@ export default {
     ...mapState(['snackbarData', 'searchResults', 'isLoading']),
   },
   mounted() {
-    if (this.searchResults) {
+    if (this.searchResults.Search) {
       this.setTableDatas();
       this.isInitialized = true;
     }
