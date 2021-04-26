@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapState } from 'vuex';
+import apiKey from '@/config';
 
 export default {
   name: 'Movie',
@@ -23,7 +24,7 @@ export default {
     },
     getMovieDetails() {
       const params = {
-        apikey: '1664b7e',
+        apikey: apiKey,
         i: this.movieId,
         plot: 'full',
       };
