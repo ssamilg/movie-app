@@ -7,6 +7,7 @@ export default {
     return {
       movieId: '',
       movieData: {},
+      isInitialized: false,
     };
   },
   computed: {
@@ -33,6 +34,9 @@ export default {
         })
         .catch((err) => {
           this.showSnackbar(err, 'error');
+        })
+        .finally(() => {
+          this.isInitialized = true;
         });
     },
     routeBack() {
@@ -60,7 +64,7 @@ export default {
 
 <template>
   <div id="movie-view">
-    <div v-if="!isLoading" class="main-wrapper">
+    <div v-if="isInitialized" class="main-wrapper">
       <div class="layout header-section">
         <div class="title">
           {{ movieData.Title }}
@@ -76,18 +80,126 @@ export default {
 
       <div class="layout info-section">
         <div style="width: 100%">
-          <div class="poster">
-            <img :src="movieData.Poster" height="400">
+          <div class="row">
+            <div class="poster">
+              <img :src="movieData.Poster" height="400">
+            </div>
+
+            <div>
+              <div class="row">
+                <div class="row-header">
+                  Actors:
+                </div>
+                {{ movieData.Actors }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Awards:
+                </div>
+                {{ movieData.Awards }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  BoxOffice:
+                </div>
+                {{ movieData.BoxOffice }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Director:
+                </div>
+                {{ movieData.Director }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Genre:
+                </div>
+                {{ movieData.Genre }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Language:
+                </div>
+                {{ movieData.Language }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Production:
+                </div>
+                {{ movieData.Production }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Runtime:
+                </div>
+                {{ movieData.Runtime }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Website:
+                </div>
+                {{ movieData.Website }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Writer:
+                </div>
+                {{ movieData.Writer }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Year:
+                </div>
+                {{ movieData.Year }}
+              </div>
+
+              <div class="row">
+                <div class="row-header">
+                  Released:
+                </div>
+                {{ movieData.Released }}
+              </div>
+
+              <div class="row ratings">
+                <div class="row-header">
+                  IMDb:
+                </div>
+
+                <div :class="ratingClass(movieData.imdbRating)">
+                  {{ movieData.imdbRating }}
+                </div>
+              </div>
+
+              <div class="row ratings">
+                <div class="row-header">
+                  Metascore:
+                </div>
+
+                <div :class="ratingClass(movieData.Metascore)">
+                  {{ movieData.Metascore }}
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="ratings">
-            <div :class="ratingClass(movieData.imdbRating)">
-              IMDb: {{ movieData.imdbRating }}
+          <div class="row">
+            <div class="row-header">
+              Plot:
             </div>
+          </div>
 
-            <div :class="ratingClass(movieData.Metascore)">
-              Metascore: {{ movieData.Metascore }}
-            </div>
+          <div>
+            {{ movieData.Plot }}
           </div>
         </div>
       </div>
@@ -100,6 +212,21 @@ export default {
   height: 100%;
   padding: 16px;
   background-color: #DACFF2;
+
+  .layout {
+    justify-content: start;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    padding-top: 8px;
+
+    &-header {
+      font-weight: 700;
+      padding-right: 4px;
+    }
+  }
 
   .main-wrapper {
     height: 100%;
@@ -126,6 +253,10 @@ export default {
         color: white;
         font-weight: 500;
       }
+    }
+
+    .poster {
+      padding-right: 8px;
     }
 
     .info-section {
