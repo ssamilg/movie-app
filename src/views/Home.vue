@@ -1,6 +1,5 @@
 <script>
 import { mapActions, mapState } from 'vuex';
-import apiKey from '@/config';
 import Datatable from '@/components/Datatable.vue';
 import Snackbar from '@/components/Snackbar.vue';
 
@@ -40,7 +39,6 @@ export default {
     },
     searchMovie() {
       const params = {
-        apikey: apiKey,
         s: this.searchText,
       };
 
