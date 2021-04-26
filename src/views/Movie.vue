@@ -17,7 +17,7 @@ export default {
     this.getMovieDetails();
   },
   methods: {
-    ...mapActions(['fetchMovieData']),
+    ...mapActions(['fetchMovieData', 'showSnackbar']),
     getIdFromQuery() {
       this.movieId = this.$route.query.id;
     },
@@ -31,6 +31,9 @@ export default {
       this.fetchMovieData(params)
         .then(() => {
           this.movieData = this.movieDetails;
+        })
+        .catch((err) => {
+          this.showSnackbar(err, 'error');
         });
     },
     routeBack() {
