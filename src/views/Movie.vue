@@ -15,7 +15,13 @@ export default {
   },
   created() {
     this.getIdFromQuery();
-    this.getMovieDetails();
+
+    if (this.movieId !== this.movieDetails.imdbID) {
+      this.getMovieDetails();
+    } else {
+      this.movieData = this.movieDetails;
+      this.isInitialized = true;
+    }
   },
   methods: {
     ...mapActions(['fetchMovieData', 'showSnackbar']),
