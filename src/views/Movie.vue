@@ -70,7 +70,16 @@ export default {
 
 <template>
   <div id="movie-view">
-    <div v-if="isInitialized" class="main-wrapper">
+    <div v-if="isLoading" class="movie-loader">
+      <div class="ui segment fill-height">
+        <div class="ui active inverted dimmer">
+          <div class="ui text loader">Loading</div>
+        </div>
+        <p></p>
+      </div>
+    </div>
+
+    <div v-else-if="isInitialized" class="main-wrapper">
       <div class="layout header-section">
         <div class="title">
           {{ movieData.Title }}
@@ -232,6 +241,10 @@ export default {
       font-weight: 700;
       padding-right: 4px;
     }
+  }
+
+  .movie-loader {
+    height: 100%;
   }
 
   .main-wrapper {
