@@ -1,6 +1,8 @@
 # movie-app
 Movie app for listing movies
 
+Live demo: https://ssg-movie-app.netlify.app/
+
 ## Project setup
 ```
 npm install
