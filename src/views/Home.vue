@@ -13,7 +13,7 @@ export default {
     return {
       isInitialized: false,
       searchText: '',
-      year: '2021',
+      year: '',
     };
   },
   computed: {
