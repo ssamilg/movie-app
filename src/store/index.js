@@ -7,9 +7,13 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    searchResults: [],
+    searchResults: {
+      items: [],
+      headers: [],
+    },
     movieDetails: {},
     isLoading: false,
+    isErrored: false,
     snackbarData: {
       isVisible: false,
       text: 'An error occured...',
@@ -26,6 +30,9 @@ export default new Vuex.Store({
     setIsLoading(state, value) {
       state.isLoading = value;
     },
+    setIsErrored(state, value) {
+      state.isErrored = value;
+    },
     setSnackbarData(state, value) {
       state.snackbarData = value;
     },
@@ -33,11 +40,17 @@ export default new Vuex.Store({
   actions: {
     fetchMovieData({ commit }, params) {
       commit('setIsLoading', true);
+      commit('setIsErrored', false);
 
       return axios.get(`?${formatParams(params)}`)
         .then(({ data }) => {
           if (data.Search) {
-            commit('setSearchResults', data);
+            const searchResults = {
+              items: data.Search,
+              headers: Object.keys(data.Search[0]).filter((h) => h !== 'imdbID'),
+            };
+
+            commit('setSearchResults', searchResults);
           } else if (data.Error) {
             const snackbar = {
               isVisible: true,
@@ -45,6 +58,8 @@ export default new Vuex.Store({
               type: 'error',
             };
 
+            commit('setIsErrored', true);
+            commit('setSearchResults', []);
             commit('setSnackbarData', snackbar);
           } else {
             commit('setMovieDetails', data);

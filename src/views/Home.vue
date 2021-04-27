@@ -13,18 +13,14 @@ export default {
     return {
       isInitialized: false,
       searchText: '',
-      table: {
-        items: [],
-        headers: [],
-      },
+      year: '2021',
     };
   },
   computed: {
-    ...mapState(['snackbarData', 'searchResults', 'isLoading']),
+    ...mapState(['snackbarData', 'searchResults', 'isLoading', 'isErrored']),
   },
   mounted() {
-    if (this.searchResults.Search) {
-      this.setTableDatas();
+    if (this.searchResults.items.length) {
       this.isInitialized = true;
     }
   },
@@ -40,22 +36,17 @@ export default {
     searchMovie() {
       const params = {
         s: this.searchText,
+        y: this.year,
       };
 
       this.fetchMovieData(params)
-        .then(() => {
-          this.setTableDatas();
-        })
         .catch((err) => {
+          console.log(err);
           this.showSnackbar(err, 'error');
         })
         .finally(() => {
           this.isInitialized = true;
         });
-    },
-    setTableDatas() {
-      this.table.items = this.searchResults.Search;
-      this.table.headers = Object.keys(this.searchResults.Search[0]).filter((h) => h !== 'imdbID');
     },
   },
 };
@@ -81,10 +72,17 @@ export default {
               <i class="search icon"/>
             </div>
           </div>
+
+          <div class="date-input-section">
+            <div class="ui massive fluid icon input">
+              <input v-model="year" type="text" placeholder="Year">
+              <i class="calendar icon"/>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div v-if="isInitialized" class="layout table-wrapper">
+      <div v-if="isInitialized && !isErrored" class="layout table-wrapper">
         <div v-if="isLoading" class="table-loader">
           <div class="ui segment fill-height">
             <div class="ui active inverted dimmer">
@@ -96,8 +94,8 @@ export default {
 
         <div v-else class="results-table">
           <datatable
-            :headers="table.headers"
-            :items="table.items"
+            :headers="searchResults.headers"
+            :items="searchResults.items"
           />
         </div>
       </div>
@@ -149,7 +147,11 @@ export default {
       width: 80%;
 
       .search-input-section {
-        width: 80%;
+        width: 70%;
+      }
+      .date-input-section {
+        width: 30%;
+        padding-left: 8px;
       }
     }
 
