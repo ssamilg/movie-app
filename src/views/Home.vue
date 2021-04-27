@@ -75,7 +75,12 @@ export default {
 
           <div class="date-input-section">
             <div class="ui massive fluid icon input">
-              <input v-model="year" type="text" placeholder="Year">
+              <input
+                v-model="year"
+                type="text"
+                placeholder="Year"
+                @keyup.enter="searchInputChange"
+              >
               <i class="calendar icon"/>
             </div>
           </div>
